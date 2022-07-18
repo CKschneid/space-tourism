@@ -8,6 +8,10 @@ const theme = {
     primary: "Bellefair, serif",
     secondary: "Barlow Condensed, sans-serif",
   },
+  devices: {
+    mobile: "450px",
+    tablet: "820px",
+  },
 };
 
 export default theme;
