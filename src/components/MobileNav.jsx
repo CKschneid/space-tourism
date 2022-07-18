@@ -33,7 +33,7 @@ const Links = styled.ul`
   background: rgba(255, 255, 255, 0.04);
   backdrop-filter: blur(81.5485px);
   transform: ${({ visible }) =>
-    visible ? "translateX(0px)" : "translateX(500px)"};
+    visible ? "translateX(0px)" : "translateX(690px)"};
   transition: transform 1s ease-in-out;
 `;
 
