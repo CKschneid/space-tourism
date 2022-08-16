@@ -1,6 +1,6 @@
 # Frontend Mentor - Space tourism website solution
 
-This is a solution to the [Space tourism website challenge on Frontend Mentor](https://www.frontendmentor.io/challenges/space-tourism-multipage-website-gRWj1URZ3). Frontend Mentor challenges help you improve your coding skills by building realistic projects. 
+This is a solution to the [Space tourism website challenge on Frontend Mentor](https://www.frontendmentor.io/challenges/space-tourism-multipage-website-gRWj1URZ3). Frontend Mentor challenges help you improve your coding skills by building realistic projects.
 
 ## Table of contents
 
@@ -10,13 +10,9 @@ This is a solution to the [Space tourism website challenge on Frontend Mentor](h
   - [Links](#links)
 - [My process](#my-process)
   - [Built with](#built-with)
-  - [What I learned](#what-i-learned)
+  - [Reflections](#what-i-learned)
   - [Continued development](#continued-development)
-  - [Useful resources](#useful-resources)
-- [Author](#author)
-- [Acknowledgments](#acknowledgments)
-
-**Note: Delete this note and update the table of contents based on what sections you keep.**
+  - [Useful Resources](#useful-resources)
 
 ## Overview
 
@@ -30,83 +26,103 @@ Users should be able to:
 
 ### Screenshot
 
-![](./screenshot.jpg)
-
-Add a screenshot of your solution. The easiest way to do this is to use Firefox to view your project, right-click the page and select "Take a Screenshot". You can choose either a full-height screenshot or a cropped one based on how long the page is. If it's very long, it might be best to crop it.
-
-Alternatively, you can use a tool like [FireShot](https://getfireshot.com/) to take the screenshot. FireShot has a free option, so you don't need to purchase it. 
-
-Then crop/optimize/edit your image however you like, add it to your project, and update the file path in the image above.
-
-**Note: Delete this note and the paragraphs above when you add your screenshot. If you prefer not to add a screenshot, feel free to remove this entire section.**
+![preview](public/preview.jpg)
 
 ### Links
 
-- Solution URL: [Add solution URL here](https://your-solution-url.com)
-- Live Site URL: [Add live site URL here](https://your-live-site-url.com)
+- [View on CodeSandbox.io](https://codesandbox.io/s/space-tourism-tfw2y9)
 
 ## My process
 
 ### Built with
 
-- Semantic HTML5 markup
-- CSS custom properties
-- Flexbox
-- CSS Grid
-- Mobile-first workflow
 - [React](https://reactjs.org/) - JS library
-- [Next.js](https://nextjs.org/) - React framework
-- [Styled Components](https://styled-components.com/) - For styles
+- [Styled Components](https://styled-components.com/) - styling solution with theming
+- [React Router v6](https://reactrouter.com/) - For routing/nav
+- [Figma](https://www.figma.com/) - Provided design files
 
-**Note: These are just examples. Delete this note and replace the list above with your own choices**
+### Reflections
 
-### What I learned
+Through the course of this project, I got more comfortable working with styled-components and settled into patterns that fit my mental models on component-based styling. I also better compartamentalized imports/exports to avoid bloating component inventories (e.g. I found it to make more sense for me to contain all my typograpghic components in a single module.) Here is an example of a typographic component:
 
-Use this section to recap over some of your major learnings while working through this project. Writing these out and providing code samples of areas you want to highlight is a great way to reinforce your own knowledge.
-
-To see how you can add code snippets, see below:
-
-```html
-<h1>Some HTML code I'm proud of</h1>
-```
-```css
-.proud-of-this-css {
-  color: papayawhip;
-}
-```
 ```js
-const proudOfThisFunc = () => {
-  console.log('🎉')
-}
+const HeadingOne = styled.h1`
+  font-family: ${({ theme }) => theme.fontFamily.primary};
+  font-style: normal;
+  font-weight: 400;
+  font-size: 150px;
+  line-height: 172px;
+  color: ${({ theme }) => theme.colors.offWhite};
+  text-transform: uppercase;
+  text-align: ${({ centered }) => (centered ? "center" : "left")};
+
+  @media (${({ theme }) => `max-width: ${theme.devices.tablet}`}) {
+    text-align: center;
+  }
+  @media (${({ theme }) => `max-width: ${theme.devices.mobile}`}) {
+    font-weight: 400;
+    font-size: 80px;
+    line-height: 100px;
+  }
 ```
 
-If you want more help with writing markdown, we'd recommend checking out [The Markdown Guide](https://www.markdownguide.org/) to learn more.
+I experimented with alternatives to purely CSS responsive solutions. Here is a snippet of my Navigation component that conditionally rendered based on changes to window width:
 
-**Note: Delete this note and the content within this section and replace with your own learnings.**
+```js
+const GlobalNav = () => {
+  const [width, setWindowWidth] = useState(0);
+
+  const updateDimensions = () => {
+    const width = window.innerWidth;
+    setWindowWidth(width);
+  };
+
+  useEffect(() => {
+    updateDimensions();
+    window.addEventListener("resize", updateDimensions);
+    return () => window.removeEventListener("resize", updateDimensions);
+  }, []);
+
+  return <>{width >= 588 ? <Nav /> : <MobileNav />}</>;
+};
+```
+
+This pattern could probably be refactored as a custom, re-usable hook or as a Provider style component that wraps the App. I think for this specific example, I would have been better off working through a solution that was pure CSS.
+
+Another pattern I found useful was dynamic object properties. I used this to set image sources upon chnages at the subnav layer. This type of site would probably see a performance boost by taking advantage of a server side rendering framework.
+
+```js
+// Background Images
+import desktopBkg from "./crew/background-crew-desktop.jpg";
+import tabletBkg from "./crew/background-crew-tablet.jpg";
+import mobileBkg from "./crew/background-crew-mobile.jpg";
+// crew Images
+import ansariImg from "./crew/image-ansari.png";
+import gloverImg from "./crew/image-glover.png";
+import hurleyImg from "./crew/image-hurley.png";
+import shuttleworthImg from "./crew/image-shuttleworth.png";
+
+const crewImages = {
+  desktopBkg,
+  tabletBkg,
+  mobileBkg,
+  ansari: ansariImg,
+  glover: gloverImg,
+  hurley: hurleyImg,
+  shuttleworth: shuttleworthImg,
+};
+
+// using in the actual component...
+<FeaturedImage src={crewImages[featured.name]} />;
+```
 
 ### Continued development
 
-Use this section to outline areas that you want to continue focusing on in future projects. These could be concepts you're still not completely comfortable with or techniques you found useful that you want to refine and perfect.
-
-**Note: Delete this note and the content within this section and replace with your own plans for continued development.**
+Working on this project underscored the need to spend a more extended amount of time with the design files. In this case, the design files did not make user flows explicit. If I were doing over again, I would add in the protyping myself to ensure that I have all the user flow pathways mapped out. More time in the design space would have better allowed me to see component patterns and recognize configureable sub-types instead of writing redudantly bespoke components (particularly layout containers).
 
 ### Useful resources
 
-- [Example resource 1](https://www.example.com) - This helped me for XYZ reason. I really liked this pattern and will use it going forward.
-- [Example resource 2](https://www.example.com) - This is an amazing article which helped me finally understand XYZ. I'd recommend it to anyone still learning this concept.
+I always find Robin Wieruch's blog posts to be highly accessible and useful:
 
-**Note: Delete this note and replace the list above with resources that helped you during the challenge. These could come in handy for anyone viewing your solution or for yourself when you look back on this project in the future.**
-
-## Author
-
-- Website - [Add your name here](https://www.your-site.com)
-- Frontend Mentor - [@yourusername](https://www.frontendmentor.io/profile/yourusername)
-- Twitter - [@yourusername](https://www.twitter.com/yourusername)
-
-**Note: Delete this note and add/remove/edit lines above based on what links you'd like to share.**
-
-## Acknowledgments
-
-This is where you can give a hat tip to anyone who helped you out on this project. Perhaps you worked in a team or got some inspiration from someone else's solution. This is the perfect place to give them some credit.
-
-**Note: Delete this note and edit this section's content as necessary. If you completed this challenge by yourself, feel free to delete this section entirely.**
+- [React Router 6 Tutorial](https://www.robinwieruch.de/react-router/)
+- [React Styled Components Tutorial](https://www.robinwieruch.de/react-styled-components/)
