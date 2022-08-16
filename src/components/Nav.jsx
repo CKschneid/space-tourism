@@ -2,7 +2,8 @@ import { useState } from "react";
 import styled from "styled-components";
 import { NavText } from "./Typography";
 import LogoSVG from "../assets/shared/logo.svg";
-import { navData } from "../data/data";
+import { navData } from "../data/navData";
+import { NavLink as RouterLink } from "react-router-dom";
 
 const Container = styled.div`
   width: 100%;
@@ -10,10 +11,11 @@ const Container = styled.div`
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  padding-top: 40px;
+  position: absolute;
+  top: 40px;
 
   @media (${({ theme }) => `max-width: ${theme.devices.tablet}`}) {
-    padding-top: 0px;
+    top: 0px;
   }
 `;
 
@@ -23,8 +25,15 @@ const Logo = styled.img`
   width: 48px;
   height: 48px;
 `;
+const Hr = styled.hr`
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  width: 100%;
 
-const Links = styled.ul`
+  @media (${({ theme }) => `max-width: ${theme.devices.tablet}`}) {
+    display: none;
+  }
+`;
+const Links = styled.div`
   display: flex;
   flex-direction: row;
   padding-right: 10%;
@@ -35,20 +44,26 @@ const Links = styled.ul`
     padding-right: 0px;
   }
 `;
-const Link = styled.li`
+const Link = styled(RouterLink)`
   margin: 36px 12px 0px 36px;
   padding-bottom: 36px;
-  border-bottom: ${({ active, theme }) => `1px solid ${theme.colors.offWhite}`};
+  &:hover {
+    border-bottom: 3px solid rgba(255, 255, 255, 0.5);
+  }
+  &.active {
+    border-bottom: 3px solid white;
+  }
 `;
 
 const Nav = () => {
   return (
     <Container>
       <Logo src={LogoSVG} />
+      <Hr />
       <Links>
         {navData.map((navItem) => {
           return (
-            <Link key={navItem.text}>
+            <Link to={navItem.text} key={navItem.text}>
               <NavText bold>{navItem.number}</NavText>
               <NavText>{navItem.text}</NavText>
             </Link>

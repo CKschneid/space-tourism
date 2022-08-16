@@ -11,6 +11,7 @@ const theme = {
   devices: {
     mobile: "450px",
     tablet: "820px",
+    laptop: "1095px",
   },
 };
 
