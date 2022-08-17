@@ -27,6 +27,7 @@ Users should be able to:
 ### Screenshot
 
 ![preview](public/preview.jpg)
+![design files](public/figma-screenshot.jpg)
 
 ### Links
 
